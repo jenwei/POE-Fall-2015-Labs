@@ -22,6 +22,8 @@ const int FLASHING = 1;
 const int BOUNCING = 2;
 const int ON = 3;
 
+const int LOOPTIME = 200;
+
 int state; // state stays off until button press
 
 // the setup function runs once when you press reset or power the board
@@ -70,12 +72,12 @@ void setAll(int val) {
 
 void off() {
   setAll(LOW);
-  delay(500);
+  delay(LOOPTIME);
 }
 
 void on() {
   setAll(HIGH);
-  delay(500);
+  delay(LOOPTIME);
 }
 
 void blinkOnce(int light, int delayLen) {
@@ -87,15 +89,15 @@ void blinkOnce(int light, int delayLen) {
 
 void bounce() {
   setAll(LOW);
-  blinkOnce(GREEN, 500);
-  blinkOnce(YELLOW, 500);
-  blinkOnce(RED, 500);
+  blinkOnce(GREEN, LOOPTIME/3);
+  blinkOnce(YELLOW, LOOPTIME/3);
+  blinkOnce(RED, LOOPTIME/3);
 }
 
 void flash() {
   setAll(HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(500);              // wait for a second
+  delay(LOOPTIME/2);              // wait for a second
   setAll(LOW);    // turn the LED off by making the voltage LOW
-  delay(500);
+  delay(LOOPTIME/2);
 }
 
