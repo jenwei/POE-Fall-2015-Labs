@@ -46,7 +46,6 @@ void loop() {
   } else if (state == OFF) {
     off();
   }
-  delay(1000);
 }
 
 void setState(int buttonState) { //goes off, flashing, on, bouncing, off
@@ -71,12 +70,12 @@ void setAll(int val) {
 
 void off() {
   setAll(LOW);
-  delay(2000);
+  delay(500);
 }
 
 void on() {
   setAll(HIGH);
-  delay(2000);
+  delay(500);
 }
 
 void blinkOnce(int light, int delayLen) {
@@ -95,8 +94,8 @@ void bounce() {
 
 void flash() {
   setAll(HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);              // wait for a second
+  delay(500);              // wait for a second
   setAll(LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);
+  delay(500);
 }
 
