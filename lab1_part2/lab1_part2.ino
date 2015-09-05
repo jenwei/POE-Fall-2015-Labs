@@ -13,16 +13,16 @@
   by Scott Fitzgerald
  */
 
-//Pin outs
+// Pin outs
 const int GREEN = 3;
 const int YELLOW = 5;
 const int RED = 6;
 
-//Pin ins
+// Pin ins
 const int BUTTON = 8;
 const int POT = 0;
 
-//Modes
+// Modes
 const int OFF = 0;
 const int FLASHING = 1;
 const int BOUNCING = 2;
@@ -34,7 +34,7 @@ const int MAXANALOGREADVAL = 1023;
 
 int state; // state stays off until button press
 int loopCount; 
-int buttonPressedCount; //button state tracking to account for debouncing
+int buttonPressedCount; // button state tracking to account for debouncing
 int brightness; // where 255 is max LED brightness
 boolean flashingOn; // used to track status of LEDs in flashing mode
 
@@ -83,7 +83,7 @@ void detectButtonPress(){
   }
 }
 
-void switchState() { //goes off, flashing, on, bouncing, off
+void switchState() { // order of modes: off, flashing, on, bouncing, off
   if (state == FLASHING) {
     state = ON;
   } else if (state == ON) {

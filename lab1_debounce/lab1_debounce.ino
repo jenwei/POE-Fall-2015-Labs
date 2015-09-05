@@ -12,11 +12,14 @@
   modified 8 May 2014
   by Scott Fitzgerald
  */
+
+// Pin ins
 const int GREEN = 9;
 const int YELLOW = 10;
 const int RED = 11;
 const int BUTTON = 8;
 
+// Modes
 const int OFF = 0;
 const int FLASHING = 1;
 const int BOUNCING = 2;
@@ -26,8 +29,9 @@ const int LOOPTIME = 10;
 
 int state; // state stays off until button press
 int loopCount; 
-int buttonPressedCount; //button state tracking to account for debouncing
+int buttonPressedCount; // button state tracking to account for debouncing
 // the setup function runs once when you press reset or power the board
+
 void setup() {
   state = 0;
   pinMode(BUTTON, INPUT);
@@ -63,7 +67,7 @@ void loop() {
   loopCount++;
 }
 
-void switchState() { //goes off, flashing, on, bouncing, off
+void switchState() { // order of modes: off, flashing, on, bouncing
   if (state == FLASHING) {
     state = ON;
   } else if (state == ON) {
