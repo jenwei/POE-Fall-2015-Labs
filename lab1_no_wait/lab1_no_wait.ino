@@ -28,7 +28,7 @@ const int MAXANALOGREADVAL = 1023;
 
 int state; // state stays off until button press
 int loopCount; 
-int buttonPressedCount; //button state tracking to account for debouncing
+int buttonPressedCount; // button state tracking to account for debouncing
 int brightness; // where 255 is max LED brightness
 boolean flashingOn; // used to track status of LEDs in flashing mode
 
@@ -75,7 +75,7 @@ void detectButtonPress(){
   }
 }
 
-void switchState() { //goes off, flashing, on, bouncing, off
+void switchState() { // goes off, flashing, on, bouncing, off
   if (state == FLASHING) {
     state = ON;
   } else if (state == ON) {
