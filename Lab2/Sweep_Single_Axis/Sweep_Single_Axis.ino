@@ -25,9 +25,9 @@ void setup()
  
 void loop() 
 { 
-  int currentTime = millis();
-  int angle = setAngle(currentTime);
-  int sensorValue = analogRead(0); // read pin 0
+  long currentTime = millis();
+  long angle = setAngle(currentTime);
+  int sensorValue = analogRead(0); // read pin A0
   
   Serial.print(sensorValue);
   Serial.print(", ");
@@ -35,8 +35,8 @@ void loop()
 
 } 
 
-int setAngle(int currentTime){
-  int timeMod = currentTime % (2*SWEEP_INTERVAL);
+int setAngle(long currentTime){
+  long timeMod = currentTime % (2*SWEEP_INTERVAL);
   int servoAngle;
   if (timeMod > SWEEP_INTERVAL){
     //the servo should sweep from ANGLE_RANGE to 0 degrees
