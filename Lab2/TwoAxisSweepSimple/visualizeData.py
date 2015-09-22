@@ -19,13 +19,17 @@ def polarToCoordinate(a, d):
 
 def getArrayFromFile(path):
     return np.loadtxt(path, delimiter=',')
-
-def plotScannerData(data):
-    width, height = np.shape(data)
-    X = np.arange(0,height,1)
-    Y = np.arange(0,width,1)
-    X, Y = np.meshgrid(X,Y)
-    Z = data
+    
+def convertToXYZ(v,h,r):
+    x = r*np.cos(v*np.pi/180)*np.cos(h*np.pi/180)
+    y = r*np.cos(v*np.pi/180)*np.sin(h*np.pi/180)
+    z = r*np.sin(v)
+    return (x,y,z) 
+           
+def plotScannerData(xs,ys,zs):
+    print ("Plotting now")
+    X, Y = np.meshgrid(xs,ys)
+    Z = zs
     hf = plt.figure()
     ha = hf.add_subplot(111, projection='3d')
     ha.plot_surface(X,Y,Z, cmap=cm.coolwarm, cstride=2)
@@ -33,6 +37,11 @@ def plotScannerData(data):
     plt.show()
 
 if __name__ == '__main__':
-    analogReadVals = getArrayFromFile('scanner3Ddata.csv')
-    data = np.vectorize(analogReadToDist)(analogReadVals)     
-    plotScannerData(data)
+    print ("Starting here")
+    analogReadVals = getArrayFromFile('data_09222015.csv')
+    vertAngles = analogReadVals[:,0]
+    horzAngles = analogReadVals[:,1]
+    radiis = np.vectorize(analogReadToDist)(analogReadVals[:,2])
+    xs,ys,zs = convertToXYZ(vertAngles, horzAngles, radiis)
+    print ("About to plot")
+    plotScannerData(xs,ys,zs)
