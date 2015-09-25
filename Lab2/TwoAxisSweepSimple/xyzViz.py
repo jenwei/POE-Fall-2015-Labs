@@ -29,7 +29,7 @@ def convertToXYZ(v,h,r):
     return (x,y,z) 
 
 def plotScannerData(x,y,z):
-    hf = plt.figure(1)
+    hf = plt.figure()
     ha = hf.add_subplot(111, projection='3d')
     ha.plot_wireframe(x,y,z, cmap=cm.coolwarm, cstride=5)
     ha.set_xlabel('x (cm)')
@@ -38,17 +38,17 @@ def plotScannerData(x,y,z):
     ha.set_xlim3d(0, 50)
     ha.set_ylim3d(0, 50)
     ha.set_zlim3d(0, 100)
-    hf.show()
+    plt.show()
 
 def plotHeatMap(x,y,z):
-    hf = plt.figure(2)
-    z_min, z_max = -np.abs(z).max(), np.abs(z).max() - 100
-    plt.pcolor(x, y, z, cmap='RdBu', vmin=z_min, vmax=z_max)
+    hf = plt.figure()
+    z_min, z_max = -np.abs(z).max(), np.abs(z).max()
+    plt.pcolor(x, y, z, cmap='RdBu', vmin=0, vmax=z_max - 120)
     plt.title('pcolor')
 # set the limits of the plot to the limits of the data
-    plt.axis([x.min(), x.max(), y.min(), y.max()])
+    plt.axis([x.min(), 20, y.min(), 40])
     plt.colorbar()
-    hf.show()
+    plt.show()
 
 
 def scrubData(data, cutoff):
@@ -67,6 +67,5 @@ if __name__ == '__main__':
     analogReadVals = np.reshape(data[:,2], (60, -1))
     R = np.vectorize(analogReadToDist)(analogReadVals)     
     X, Y, Z = convertToXYZ(V,H,R)
-    plotScannerData(X,Y,Z)
-    plotHeatMap(Z,X,Y)
-    raw_input()
+    #plotScannerData(X,Y,Z)
+    plotHeatMap(X,Z,Y)
