@@ -19,6 +19,7 @@ void setup()
 
 void runScan()
 {
+  vert.write(60); 
   for(int j = HORZ_SWEEP_START; j < HORZ_SWEEP_START + HORZ_SWEEP_RANGE; j++){
     horz.write(j);
     delay(SETTLE_TIME);
