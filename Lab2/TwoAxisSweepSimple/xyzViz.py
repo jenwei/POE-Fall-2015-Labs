@@ -25,21 +25,34 @@ def getArrayFromFile(path):
 def convertToXYZ(v,h,r):
     x = r*np.cos(v*np.pi/180)*np.cos(h*np.pi/180)
     y = r*np.cos(v*np.pi/180)*np.sin(h*np.pi/180)
-    z = r*np.sin(v)
+    z = r*np.sin(v*np.pi/180)
     return (x,y,z) 
 
 def plotScannerData(x,y,z):
     hf = plt.figure()
     ha = hf.add_subplot(111, projection='3d')
-    ha.plot_surface(x,y,z, cmap=cm.coolwarm, cstride=2)
-    ha.set_zlabel('distance from scanner (cm)')
+    ha.plot_wireframe(x,y,z, cmap=cm.coolwarm, cstride=5)
+    ha.set_xlabel('x (cm)')
+    ha.set_ylabel('y (cm)')
+    ha.set_zlabel('z (cm)')
+    ha.set_xlim3d(0, 50)
+    ha.set_ylim3d(0, 50)
+    ha.set_zlim3d(0, 100)
     plt.show()
+
+def scrubData(data, cutoff):
+    scrubbed = np.zeros(data.shape)
+    for i, val in enumerate(data):
+        if(val < cutoff):
+            scrubbed[i] = data[i]
+    return scrubbed
 
 if __name__ == '__main__':
     data = getArrayFromFile('data_09222015.csv')
-    V = np.reshape(data[:,0], (60, -1))
-    H = np.reshape(data[:,1], (60, -1))
+    V = np.reshape(data[:,0] - min(data[:,0]), (60, -1))
+    H = np.reshape(data[:,1] - min(data[:,1]), (60, -1))
+    #cleanedData = scrubData(data[:,2])
     analogReadVals = np.reshape(data[:,2], (60, -1))
     R = np.vectorize(analogReadToDist)(analogReadVals)     
     X, Y, Z = convertToXYZ(V,H,R)
-    plotScannerData(V,H,R)
+    plotScannerData(X,Y,Z)
