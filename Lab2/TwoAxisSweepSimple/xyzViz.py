@@ -43,29 +43,21 @@ def plotScannerData(x,y,z):
 def plotHeatMap(x,y,z):
     hf = plt.figure()
     z_min, z_max = -np.abs(z).max(), np.abs(z).max()
-    plt.pcolor(x, y, z, cmap='RdBu', vmin=0, vmax=z_max - 120)
-    plt.title('pcolor')
-# set the limits of the plot to the limits of the data
+    plt.pcolor(x, y, z, cmap='bone', vmin=0, vmax=z_max - 120)
+    plt.title('3D Letter Heatmap')
+    plt.xlabel("Horizontal Distance From Sensor (cm)")
+    plt.ylabel("Vertical Distance From Sensor (cm)")
+    # set the limits of the plot to the limits of the data
     plt.axis([x.min(), 20, y.min(), 40])
     plt.colorbar()
     plt.show()
 
-
-def scrubData(data, cutoff):
-    scrubbed = np.zeros(data.shape)
-    for i, val in enumerate(data):
-        if(val < cutoff):
-            scrubbed[i] = data[i]
-    return scrubbed
-
 if __name__ == '__main__':
     data = getArrayFromFile('data_09222015.csv')
-    #V = np.reshape(data[:,0] - min(data[:,0]) + 50, (60, -1))
     V = np.reshape(data[:,0] - min(data[:,0]) - 20, (60, -1))
     H = np.reshape(data[:,1] - min(data[:,1]) + 50, (60, -1))
-    #cleanedData = scrubData(data[:,2])
     analogReadVals = np.reshape(data[:,2], (60, -1))
     R = np.vectorize(analogReadToDist)(analogReadVals)     
     X, Y, Z = convertToXYZ(V,H,R)
-    #plotScannerData(X,Y,Z)
+    
     plotHeatMap(X,Z,Y)
