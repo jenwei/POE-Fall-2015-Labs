@@ -8,6 +8,8 @@ def analogReadToDist(a):
 
 def voltageToDist(v):
     if(v == 0):
+        # v cannot be 0 (the equation below won't work - so setting it to a 
+        # large value that won't affect the visualization)
         return 200
     return (np.log(v) - np.log(4.2223)) / -0.024
     
@@ -47,17 +49,27 @@ def plotHeatMap(x,y,z):
     plt.title('3D Letter Heatmap')
     plt.xlabel("Horizontal Distance From Sensor (cm)")
     plt.ylabel("Vertical Distance From Sensor (cm)")
-    # set the limits of the plot to the limits of the data
+    
+    # Set the limits of the plot to the limits of the data
     plt.axis([x.min(), 20, y.min(), 40])
     plt.colorbar()
     plt.show()
 
 if __name__ == '__main__':
     data = getArrayFromFile('data_09222015.csv')
+    
+    # Take the vertical and horizontal angles (from the data) and map it to the
+    #  first quadrant (so that the minimum angle is 0).
+    # Add a constant the the V and H to account for discrepancies in plane alignments
+    
     V = np.reshape(data[:,0] - min(data[:,0]) - 20, (60, -1))
     H = np.reshape(data[:,1] - min(data[:,1]) + 50, (60, -1))
     analogReadVals = np.reshape(data[:,2], (60, -1))
+    
+    # Calculate the distance read (the radius) and convert that and the angles
+    #  to Cartesian
     R = np.vectorize(analogReadToDist)(analogReadVals)     
     X, Y, Z = convertToXYZ(V,H,R)
     
+    # Plot heatmap of front face (2D shape with color to represent depth)
     plotHeatMap(X,Z,Y)

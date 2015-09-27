@@ -19,6 +19,7 @@ void setup()
 
 void runScan()
 {
+  // runScan collects the two sets of angle and sensor values from 40 to 100 degrees vertically and 60 to 140 degrees horizontally
   for(int i = VERT_SWEEP_START; i < VERT_SWEEP_START + VERT_SWEEP_RANGE; i++){
     for(int j = HORZ_SWEEP_START; j < HORZ_SWEEP_START + HORZ_SWEEP_RANGE; j++){
       vert.write(i);
@@ -40,4 +41,5 @@ void loop()
 { 
   /**
    leaving this here because it won't compile otherwise 
-   */}
+   */
+}

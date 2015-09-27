@@ -2,8 +2,6 @@
 
 const int HORZ_SWEEP_START = 80;
 const int HORZ_SWEEP_RANGE = 60;
-const int VERT_SWEEP_START = 40;
-const int VERT_SWEEP_RANGE = 60;
 const int SETTLE_TIME = 200;
 
 Servo horz;  
@@ -19,6 +17,7 @@ void setup()
 
 void runScan()
 {
+  // runScan collects the angle and sensor values from 80 to 140 degrees
   vert.write(60); 
   for(int j = HORZ_SWEEP_START; j < HORZ_SWEEP_START + HORZ_SWEEP_RANGE; j++){
     horz.write(j);

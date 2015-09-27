@@ -5,7 +5,7 @@ def analogReadToDist(a):
     return voltageToDist(analogReadToVoltage(a))
 
 def voltageToDist(v):
-    return (np.log(v) - np.log(4.2223)) / -0.024
+    return (np.log(v) - np.log(4.2223)) / -0.024 # calibration generated equation
     
 def analogReadToVoltage(a):
     return a * 1.0 / 1023 * 5 
@@ -17,10 +17,9 @@ def polarToCoordinate(a, d):
 
 def plotSingleSweep():
     data = np.loadtxt("sweepdata.csv", delimiter=',')
-    #data = np.genfromtxt("sweepdata.csv", delimiter = ",")
     sensorVals = data[:,1]
     distances = np.vectorize(analogReadToDist)(sensorVals)
-    angles = data[:,0] -80
+    angles = data[:,0] - 80 # subtracting 80 to remap so min angle=0 instead
     x,y = polarToCoordinate(angles, distances)
     plt.plot(x,y)
     plt.xlabel('X (cm)')
