@@ -2,9 +2,9 @@
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_PWMServoDriver.h"
 
-double P = .80; // between 0 and 1
-double I = 0; 
-double D = 0;
+double P = .80; // proportion between 0 and 1
+double I = 0; // integral between 0 and 1
+double D = 0; // derivative between 0 and 1
 byte S = 50; // speed between 0 and 255
 
 int sensorPin0 = A0;    // select the input pin for IR sensor 0
@@ -14,10 +14,9 @@ int sensorPin1 = A1;    // select the input pin for IR sensor 1
 int sensorValue1 = 0;  // variable to store the value coming from sensor 1
 
 // VARIABLES FOR SERIAL COM
-String validInput = "PIDS"; // String of Inputs (Proportion, Integral, Derivative, Speed)that can be toggled via Serial
+String validInput = "PIDS"; // string of Inputs (Proportion, Integral, Derivative, Speed)that can be toggled via Serial
 char paramToSet = ' ';
 boolean readingFirstChar = true;
-
 
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *motor1 = AFMS.getMotor(3);
@@ -32,15 +31,18 @@ void setup() {
 }
 
 void loop() {
-  serialEvent(); //call the function for serial com
-  // read the value from the sensor:
+  serialEvent(); // call the function for serial com
+  
+  // read the value from the sensors
   sensorValue0 = analogRead(sensorPin0);
   sensorValue1 = analogRead(sensorPin1);
+  
   // calculate the error, difference in left and right sensor readings
   int error = sensorValue0 - sensorValue1;
   Serial.print("Error :");
   Serial.println(error);
-  // get control input value;
+  
+  // get control input value
   double speedDiff = calculatePID(error);
   Serial.print("SpeedDiff :");
   Serial.println(speedDiff);
@@ -58,11 +60,9 @@ double calculatePID(double error){
   return P*error;
 }
 
-
 void serialEvent() {
-  while (Serial.available()) {
-    // get the new byte:
-    if(readingFirstChar){ // If searching for valid input
+  while (Serial.available()) { // get the new byte
+    if(readingFirstChar){ // if searching for valid input
       char inChar = (char)Serial.read();  
       if(validInput.indexOf(inChar) != -1){ // if input is one of our valid inputs (P, I, D, or S)
         readingFirstChar = false;
@@ -80,7 +80,7 @@ void serialEvent() {
   }
 }
 
-void setParameter(char p, double val){
+void setParameter(char p, double val){ // set the chosen parameter with the new value inputted
   switch(p){
     case 'P':
       if(isValidRange(0,1,val)){
