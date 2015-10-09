@@ -11,7 +11,7 @@ boolean readingFirstChar = true;
 double P = 0.30;
 double I = 0;
 double D = 0;
-byte BASELINE_SPEED = 10;
+byte BASELINE_SPEED = 30;
 
 // tested with 0.3 proportion and 25 speed and worked
 
@@ -43,18 +43,22 @@ void setup() {
   motor0 -> run(FORWARD);
   motor1 -> run(FORWARD);
   
-  Serial.print("Enter the first letter of the parameter you want to tune: ");
+  //Serial.print("Enter the first letter of the parameter you want to tune: ");
 }
 
 void loop() {
-  serialEvent();
+  //serialEvent();
   collectSensorValues();
   setMotorSpeeds();
 }
 
 void collectSensorValues(){
   sensor0Val = map(analogRead(SENSOR_PIN_0), 0, 1023, 0, 255);
+  Serial.print(sensor0Val);
+  Serial.print(", ");
   sensor1Val = map(analogRead(SENSOR_PIN_1), 0, 1023, 0, 255);
+  Serial.print(sensor1Val);
+  Serial.print(", ");
 }
 
 void setMotorSpeeds(){
@@ -79,6 +83,10 @@ void setMotorSpeeds(){
   if(motor1Speed > 50){
     motor1Speed = 50;
   }
+  
+  Serial.print(motor0Speed);
+  Serial.print(", ");
+  Serial.println(motor1Speed);
   
   motor0 -> setSpeed(motor0Speed);
   motor1 -> setSpeed(motor1Speed); // what is motor1Speed equail to??
