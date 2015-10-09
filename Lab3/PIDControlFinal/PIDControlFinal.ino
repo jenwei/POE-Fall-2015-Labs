@@ -5,8 +5,8 @@
 // control parameters that are tunable from serial in
 double P = 0.30;
 double I = 0;
-double D = 0.15;
-byte BASELINE_SPEED = 45;
+double D = 0;
+byte BASELINE_SPEED = 30;
 
 // tested with 0.3 proportion and 25 speed and worked
 
