@@ -2,33 +2,35 @@
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_PWMServoDriver.h"
 
-//control parameters that are tunable from serial in
+// control parameters that are tunable from serial in
 double P = .3;
 double I = 0;
 double D = 0;
-byte BASELINE_SPEED = 20;
+byte BASELINE_SPEED = 25;
 
-//last time, error accumulator and last error for I & D
-double errorSum;
+// last time, error accumulator, and last error for I & D
 unsigned long lastTime;
+double errorSum;
 double lastError;
 
 //pin mappings
 const byte SENSOR_PIN_0 = A0;
 const byte SENSOR_PIN_1 = A1;
 
-//motorshield initialization
+// motorshield initialization
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *motor0 = AFMS.getMotor(1);
 Adafruit_DCMotor *motor1 = AFMS.getMotor(2);
 
-//sensor readings and motor settings
+// sensor readings
 byte sensor0Val;
 byte sensor1Val;
 
 void setup() {
   AFMS.begin();
   Serial.begin(9600);
+
+  // motor settings (initial state = go forward at baseline speed)
   motor0 -> setSpeed(BASELINE_SPEED);
   motor1 -> setSpeed(BASELINE_SPEED);
   motor0 -> run(FORWARD);
@@ -47,8 +49,13 @@ void collectSensorValues(){
 
 void setMotorSpeeds(){
   int speedDiff = sensor0Val - sensor1Val;
+
+  // pass in speedDiff between the two motors and apply PID
   int controlCorrection = getPIDCorrection(speedDiff);
+  
   int motor0Speed = BASELINE_SPEED + (controlCorrection/2);
+
+// DELETE THE COMMENTED CODE BELOW?
 //  if(motor0Speed < 0){
 //    motor0Speed = 0;
 //  }
@@ -63,14 +70,20 @@ void setMotorSpeeds(){
 //    motor1Speed = 50;
 //  }
   motor0 -> setSpeed(motor0Speed);
-  motor1 -> setSpeed(motor1Speed);
+  motor1 -> setSpeed(motor1Speed); // what is motor1Speed equail to??
 }
 
 int getPIDCorrection(int speedDiff){
   unsigned long now = millis();
   double timeChange = (double)(now - lastTime);
+
+  // calculating the integral
   errorSum += (speedDiff * timeChange);
+
+  // calculating the derivative
   int errorDiff = (speedDiff - lastError) / timeChange;
+
+  // return the post-PID corrected speed
   return P*speedDiff + I*errorSum + D*errorDiff;
 }
 
