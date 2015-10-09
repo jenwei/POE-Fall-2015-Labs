@@ -3,10 +3,12 @@
 #include "utility/Adafruit_PWMServoDriver.h"
 
 // control parameters that are tunable from serial in
-double P = .3;
+double P = 0.30;
 double I = 0;
-double D = 0;
-byte BASELINE_SPEED = 25;
+double D = 0.15;
+byte BASELINE_SPEED = 45;
+
+// tested with 0.3 proportion and 25 speed and worked
 
 // last time, error accumulator, and last error for I & D
 unsigned long lastTime;
@@ -55,20 +57,21 @@ void setMotorSpeeds(){
   
   int motor0Speed = BASELINE_SPEED + (controlCorrection/2);
 
-// DELETE THE COMMENTED CODE BELOW?
-//  if(motor0Speed < 0){
-//    motor0Speed = 0;
-//  }
-//  if(motor0Speed > 50){
-//    motor0Speed = 50;
-//  }
-//  int motor1Speed = BASELINE_SPEED - (controlCorrection/2);
-//  if(motor1Speed < 0){
-//    motor1Speed = 0;
-//  }
-//  if(motor1Speed > 50){
-//    motor1Speed = 50;
-//  }
+  // if else statements to prevent too drastic of changes in speed
+  if(motor0Speed < 0){
+    motor0Speed = 0;
+  }
+  if(motor0Speed > 50){
+    motor0Speed = 50;
+  }
+  int motor1Speed = BASELINE_SPEED - (controlCorrection/2);
+  if(motor1Speed < 0){
+    motor1Speed = 0;
+  }
+  if(motor1Speed > 50){
+    motor1Speed = 50;
+  }
+  
   motor0 -> setSpeed(motor0Speed);
   motor1 -> setSpeed(motor1Speed); // what is motor1Speed equail to??
 }
