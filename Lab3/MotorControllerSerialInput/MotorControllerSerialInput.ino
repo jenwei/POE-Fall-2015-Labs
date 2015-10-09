@@ -5,7 +5,7 @@
 double P = .80; // proportion between 0 and 1
 double I = 0; // integral between 0 and 1
 double D = 0; // derivative between 0 and 1
-byte S = 50; // speed between 0 and 255
+double S = 50; // speed between 0 and 255
 
 int sensorPin0 = A0;    // select the input pin for IR sensor 0
 int sensorValue0 = 0;  // variable to store the value coming from the sensor 0
@@ -23,11 +23,15 @@ Adafruit_DCMotor *motor1 = AFMS.getMotor(3);
 Adafruit_DCMotor *motor2 = AFMS.getMotor(4);
 
 void setup() {
-  AFMS.begin();
   Serial.begin(9600);
-  motor1->setSpeed(S); //between 0 and 255
-  motor2->setSpeed(S);
+  AFMS.begin();
+  motor1->setSpeed(doubleToByte(S)); //between 0 and 255
+  motor2->setSpeed(doubleToByte(S));
   Serial.print("Enter the first letter of the parameter you want to tune: ");
+}
+
+void loop1(){
+ Serial.println("hello"); 
 }
 
 void loop() {
@@ -46,8 +50,8 @@ void loop() {
   double speedDiff = calculatePID(error);
   Serial.print("SpeedDiff :");
   Serial.println(speedDiff);
-  int motor1Speed = (int)(S + speedDiff/2);
-  int motor2Speed = (int)(S - speedDiff/2);
+  int motor1Speed = doubleToByte(S + speedDiff/2);
+  int motor2Speed = doubleToByte(S - speedDiff/2);
   Serial.println(motor1Speed);
   Serial.println(motor2Speed);
   motor1->setSpeed(min(motor1Speed, 255));
@@ -99,7 +103,7 @@ void setParameter(char p, double val){ // set the chosen parameter with the new 
       break;
     case 'S':
       if(isValidRange(0,255,val)){
-        S = doubleToByte(val);  
+        S = val;  
       }
       break;
   }
