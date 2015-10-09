@@ -30,6 +30,9 @@
 int sensorPin = A0;    // select the input pin for the potentiometer
 int sensorValue = 0;  // variable to store the value coming from the sensor
 
+int sensorPin1 = A1;    // select the input pin for IR sensor 1
+int sensorValue1 = 0;  // variable to store the value coming from sensor 1
+
 void setup() {
   Serial.begin(9600);
 }
@@ -37,5 +40,8 @@ void setup() {
 void loop() {
   // read the value from the sensor:
   sensorValue = analogRead(sensorPin);
-  Serial.println(sensorValue);
+  //Serial.println(sensorValue);
+  sensorValue1 = analogRead(sensorPin1);
+  //Serial.println(sensorValue1);
+  Serial.println(sensorValue-sensorValue1);
 }
